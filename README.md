@@ -1,20 +1,20 @@
-# Raspberry Pi OpenAI Assistant
+# Asystent OpenAI na Raspberry Pi
 
-This project provides a lightweight, extensible voice-ready assistant that can run on a Raspberry Pi and communicate with the OpenAI API. The assistant currently supports a text-based console conversation loop and is structured to allow new input/output modalities (such as speech recognition or GPIO interactions) to be added later.
+Projekt udostępnia lekkiego, łatwego do rozbudowy asystenta gotowego na obsługę głosu, który może działać na Raspberry Pi i komunikować się z API OpenAI. Obecnie dostępny jest tekstowy tryb rozmowy w konsoli, a architektura pozwala w prosty sposób dodawać kolejne moduły wejścia/wyjścia (np. rozpoznawanie mowy lub integracje z GPIO).
 
-## Features
+## Funkcje
 
-- Conversational interface using OpenAI chat models.
-- Configurable system prompt, model name, and temperature via YAML or JSON configuration.
-- Command shortcuts for resetting the conversation or exiting the assistant.
-- Structured codebase designed for easy extension with additional capabilities.
+- Interfejs konwersacyjny wykorzystujący modele czatu OpenAI.
+- Konfigurowalny prompt systemowy, nazwa modelu oraz temperatura poprzez plik YAML lub JSON.
+- Skróty poleceń do resetowania rozmowy i zamykania programu.
+- Struktura kodu przygotowana na dalszą rozbudowę o kolejne możliwości.
 
-## Requirements
+## Wymagania
 
 - Python 3.11+
-- An active OpenAI API key (`OPENAI_API_KEY` environment variable)
+- Aktywny klucz OpenAI API (zmienna środowiskowa `OPENAI_API_KEY`)
 
-Install Python dependencies:
+Instalacja zależności:
 
 ```bash
 python -m venv .venv
@@ -22,65 +22,87 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Configuration
+## Konfiguracja
 
-Copy the example configuration file and adjust it to your needs:
+Skopiuj plik przykładowej konfiguracji i dostosuj go do własnych potrzeb:
 
 ```bash
 cp config.example.yaml config.yaml
 ```
 
-> **Note:** If `pyyaml` is not installed the loader falls back to JSON parsing. In that case ensure your configuration file contains valid JSON content.
+> **Uwaga:** jeśli pakiet `pyyaml` nie jest zainstalowany, loader użyje parsera JSON. W takiej sytuacji upewnij się, że plik konfiguracyjny zawiera poprawny JSON.
 
-Available configuration options:
+Dostępne opcje:
 
-- `model`: Chat model to use (default: `gpt-4o-mini`).
-- `temperature`: Sampling temperature for the model (default: `0.7`).
-- `system_prompt`: A high-level instruction that guides the assistant's behavior.
+- `model`: nazwa modelu czatu (domyślnie `gpt-4o-mini`).
+- `temperature`: temperatura próbkowania modelu (domyślnie `0.7`).
+- `system_prompt`: ogólna instrukcja prowadząca zachowanie asystenta.
 
-## Running the Assistant
+## Uruchamianie asystenta
 
 ```bash
 PYTHONPATH=src python -m assistant.main
 ```
 
-If the official `openai` package is not installed the assistant automatically
-falls back to a lightweight offline stub that simply echoes back what you said.
-Install the real SDK to connect to the OpenAI API when you have internet
-access.
+Jeśli oficjalny pakiet `openai` nie jest zainstalowany, asystent automatycznie przełącza się na lekki tryb offline i powtarza w odpowiedzi to, co napisał użytkownik. Aby korzystać z prawdziwego API OpenAI, doinstaluj oficjalny pakiet i ustaw klucz w zmiennej środowiskowej.
 
-Within the session you can use the following commands:
+W trakcie sesji dostępne są polecenia:
 
-- `/exit` – quit the assistant.
-- `/reset` – clear the conversation history while keeping the assistant running.
+- `/exit` – zakończ działanie asystenta.
+- `/reset` – wyczyść historię rozmowy bez zamykania programu.
 
-## Extending for Raspberry Pi
+## Rozszerzenie pod Raspberry Pi
 
-The code is organized to make it easy to add new input/output providers. To add voice interaction on a Raspberry Pi, create a new module that implements the `BaseIO` protocol (see `assistant/io/text.py` for a reference implementation) and integrate libraries such as `speech_recognition` for capturing audio and `pyttsx3` or aplay for playback.
+Kod jest zorganizowany tak, aby łatwo dodawać nowe sterowniki wejścia/wyjścia. Aby dodać obsługę mowy na Raspberry Pi, przygotuj moduł implementujący protokół `BaseIO` (zob. `assistant/io/text.py` jako przykład) i zintegruj biblioteki takie jak `speech_recognition` (nagrywanie audio) oraz `pyttsx3` lub `aplay` (odtwarzanie odpowiedzi).
 
-## Testing
+## Testy
 
-The project includes a basic test suite that validates configuration loading. Run the tests with:
+Podstawowy zestaw testów sprawdza ładowanie konfiguracji. Uruchomisz je poleceniem:
 
 ```bash
 pytest
 ```
 
-## Environment Variables
+## Zmienne środowiskowe
 
-Set your OpenAI API key before running the assistant:
+Przed uruchomieniem asystenta ustaw klucz OpenAI:
 
 ```bash
 export OPENAI_API_KEY="sk-..."
 ```
 
-Alternatively, you can place the key in a `.env` file (see `assistant/config.py` for details).
+Alternatywnie możesz umieścić klucz w pliku `.env` (szczegóły w `assistant/config.py`).
 
-## Roadmap Ideas
+## Publikacja na GitHubie
 
-- Voice input and text-to-speech output.
-- Integration with Raspberry Pi GPIO peripherals.
-- Scheduling and reminders.
-- Support for local command execution.
+1. **Zainicjuj repozytorium (jeśli jeszcze nie istnieje):**
+   ```bash
+   git init
+   git branch -m main
+   git add .
+   git commit -m "Inicjalna wersja asystenta"
+   ```
+2. **Utwórz zdalne repozytorium na GitHubie**, np. wchodząc na https://github.com/new i nadając mu nazwę.
+3. **Połącz lokalne repozytorium ze zdalnym:**
+   ```bash
+   git remote add origin git@github.com:twoja-nazwa-uzytkownika/twoje-repo.git
+   ```
+   lub w wersji HTTPS:
+   ```bash
+   git remote add origin https://github.com/twoja-nazwa-uzytkownika/twoje-repo.git
+   ```
+4. **Wypchnij kod na GitHuba:**
+   ```bash
+   git push -u origin main
+   ```
 
-Contributions and suggestions are welcome!
+Jeżeli repozytorium już istnieje, wystarczy dodać nowy zdalny adres (krok 3) i wykonać `git push`. Przy kolejnych zmianach użyj sekwencji `git add`, `git commit`, `git push`, aby aktualizować kod na GitHubie.
+
+## Pomysły na rozwój
+
+- Obsługa wejścia głosowego i syntezy mowy.
+- Integracja z peryferiami GPIO Raspberry Pi.
+- Harmonogramy i przypomnienia.
+- Wsparcie dla wykonywania lokalnych poleceń systemowych.
+
+Chętnie przyjmę sugestie i kontrybucje!
